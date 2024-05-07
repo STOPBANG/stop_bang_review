@@ -25,9 +25,9 @@ module.exports = {
 
     httpRequest(getOptions)
     .then(response => {
-      const repoCount =response.body.length;
+      const reportCount =response.body.length;
     
-      if(repoCount >= 1) reportResult.result = 1;
+      if(reportCount >= 7) reportResult.result = 1;
       else reportResult.result = 0;
 
       return res.json(reportResult);
