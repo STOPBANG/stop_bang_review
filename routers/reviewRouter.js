@@ -9,4 +9,9 @@ router.use((req, res, next) => {
   next();
 });
 
+router.get(
+  "/reportCheck/:rv_id",
+  reviewController.reportCheck
+)
+
 module.exports = router;
