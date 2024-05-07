@@ -24,8 +24,8 @@ module.exports = {
     .then(response => {
       const repoCount =response.body.length;
     
-      if(repoCount >= 7) resultInt = 0;
-      else resultInt = 1;
+      if(repoCount >= 7) resultInt = 1;
+      else resultInt = 0;
 
       const result = {
         rv_id: req.params_rv_id,
