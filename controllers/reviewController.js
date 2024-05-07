@@ -11,7 +11,7 @@ module.exports = {
     const reportResult = {}
 
     reportResult.rv_id = req.params.rv_id;
-    reportResult.resultInt = 0;
+    reportResult.result = 0;
     
     const getOptions = {
       host: 'stop_bang_sub_DB',
@@ -27,8 +27,8 @@ module.exports = {
     .then(response => {
       const repoCount =response.body.length;
     
-      if(repoCount >= 1) reportResult.resultInt = 1;
-      else reportResult.resultInt = 0;
+      if(repoCount >= 1) reportResult.result = 1;
+      else reportResult.result = 0;
 
       return res.json(reportResult);
       
