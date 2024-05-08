@@ -14,4 +14,10 @@ router.get(
   reviewController.reportCheck
 )
 
+router.get(
+  "/avgRate/:ra_regno",
+  reviewController.getAvgRate
+)
+
+
 module.exports = router;
