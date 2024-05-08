@@ -25,7 +25,7 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(reviewRouter);
+app.use("/review", reviewRouter);
 
 app.listen(app.get("port"), () => {
   console.log("Review app listening on port " + app.get("port"));
