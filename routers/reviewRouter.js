@@ -9,6 +9,10 @@ router.use((req, res, next) => {
   next();
 });
 
+router.post(
+  '/:sys_ra_regno/create_process',
+  reviewController.creatingReview);
+
 router.get(
   "/reportCheck/:rv_id",
   reviewController.reportCheck
@@ -18,6 +22,5 @@ router.get(
   "/avgRate/:ra_regno",
   reviewController.getAvgRate
 )
-
 
 module.exports = router;

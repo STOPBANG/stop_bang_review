@@ -6,6 +6,78 @@ const http = require('http');
 
 
 module.exports = {
+ //후기 추가 DB 반영
+ creatingReview: (req, res) => {
+  /* msa */
+  const postOptionsResident = {
+    host: 'stop_bang_auth_DB',
+    port: process.env.PORT,
+    path: `/db/resident/findById`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  };
+  const requestBody = {username: req.body.username};
+  httpRequest(postOptionsResident, requestBody)
+  .then(() => {
+    /* 포인트 지급 */
+    // 작성된 후기가 첫 후기인지 체크
+    const getOptionsReview = {
+    host: 'stop_bang_review_DB',
+    port: process.env.PORT,
+    path: `/db/review/findAllByRegno/${req.params.sys_ra_regno}`,
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      }
+    };
+    httpRequest(getOptionsReview).then((response) => {
+      const postOptionsPoint = {
+        host: 'stop_bang_auth_DB',
+        port: process.env.PORT,
+        path: `/db/resident/updatePoint`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      };
+      let requestBodyPoint = {
+      username: req.body.username,
+      r_point: 0,
+    };
+    
+    const counts = response.body.length;
+
+    if(counts > 0)
+      requestBodyPoint.r_point=3
+    else 
+      requestBodyPoint.r_point=5
+
+    return httpRequest(postOptionsPoint, requestBodyPoint);
+  }).then(()=> {
+      /* 후기 db에 반영 */
+      const postOptionsReview = {
+        host: 'stop_bang_review_DB',
+        port: process.env.PORT,
+        path: `/db/review/create`,
+        method: 'POST',
+        headers: {
+         'Content-Type': 'application/json',
+        }
+      };
+      const requestBody = {
+        ...
+        req.body,
+        r_id: req.body.id,
+        ra_regno: req.params.sys_ra_regno,
+      };
+
+      return httpRequest(postOptionsReview, requestBody);
+    });
+  return res.json({});
+  })
+},
 
   reportCheck: async (req, res) => {
     const reportResult = {}
