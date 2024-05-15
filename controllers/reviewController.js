@@ -50,6 +50,7 @@ module.exports = {
     };
     httpRequest(getOptions).then((response) => {
       const reviewCount = response.body.length;
+      result.count=reviewCount;
       
       if (reviewCount>0){
         let ratingSum = 0;
