@@ -10,12 +10,16 @@ router.use((req, res, next) => {
 });
 
 router.post(
-  '/:sys_ra_regno/create_process',
+  '/create_process/:sys_ra_regno',
   reviewController.creatingReview);
 
 router.get(
   '/update/:rv_id',
   reviewController.updateReview);
+
+router.post(
+  '/update_process/:rv_id',
+  reviewController.updatingReview);
 
 router.get(
   "/reportCheck/:rv_id",
