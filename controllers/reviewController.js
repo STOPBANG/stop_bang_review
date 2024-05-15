@@ -4,7 +4,6 @@ const { httpRequest } = require('../utils/httpRequest.js');
 const http = require('http');
 
 
-
 module.exports = {
  //후기 추가 DB 반영
  creatingReview: (req, res) => {
@@ -97,6 +96,26 @@ updateReview: (req, res) => {
   });
 },
 
+//후기 수정 DB 반영
+updatingReview: async (req, res) => {
+  /* msa */
+  const postOptions = {
+    host: 'stop_bang_review_DB',
+    port: process.env.PORT,
+    path: `/db/review/update`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  const requestBody = {
+    ...
+    req.body,
+    rv_id: req.params.rv_id
+  };
+  await httpRequest(postOptions, requestBody);
+  return res.json({});
+},
 
 reportCheck: async (req, res) => {
     const reportResult = {}
