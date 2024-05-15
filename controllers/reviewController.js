@@ -81,6 +81,7 @@ module.exports = {
 
   reportCheck: async (req, res) => {
     const reportResult = {}
+    const rv_id = req.params.rv_id;
 
     reportResult.rv_id = req.params.rv_id;
     reportResult.result = 0;
@@ -88,23 +89,27 @@ module.exports = {
     const getOptions = {
       host: 'stop_bang_sub_DB',
       port: process.env.PORT,
-      path: `/db/report/findAllByID/${req.params.rv_id}`,
+      path: `/db/report/findAllByID/${rv_id}`,
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       }
     }
 
-    httpRequest(getOptions)
-    .then(response => {
-      const reportCount =response.body.length;
-    
-      if(reportCount >= 7) reportResult.result = 1;
+    try {
+      const response = await httpRequest(getOptions);
+      const reportCount = response.body.length;
+
+      if (reportCount >= 7) reportResult.result = 1;
       else reportResult.result = 0;
 
-      return res.json(reportResult);
-      
-    });
+      res.json(reportResult);
+    } catch (error) {
+      console.error("Error while fetching report data:", error);
+      // 오류가 발생하면 오류 메시지를 클라이언트로 보냄
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+    
   },
 
   getAvgRate: async (req, res) =>{
