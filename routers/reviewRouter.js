@@ -14,6 +14,10 @@ router.post(
   reviewController.creatingReview);
 
 router.get(
+  '/update/:rv_id',
+  reviewController.updateReview);
+
+router.get(
   "/reportCheck/:rv_id",
   reviewController.reportCheck
 )
