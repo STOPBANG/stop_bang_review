@@ -79,7 +79,26 @@ module.exports = {
   })
 },
 
-  reportCheck: async (req, res) => {
+updateReview: (req, res) => {
+  /* msa */
+  const getOptions = {
+    host: 'stop_bang_review_DB',
+    port: process.env.PORT,
+    path: `/db/review/findAllByReviewId/${req.params.rv_id}`,
+    method: 'GET',
+    headers: {
+      ...req.headers,
+    }
+  };
+
+  httpRequest(getOptions)
+  .then((response)=> {
+    return res.json(response.body[0]);
+  });
+},
+
+
+reportCheck: async (req, res) => {
     const reportResult = {}
 
     reportResult.rv_id = req.params.rv_id;
