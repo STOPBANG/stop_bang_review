@@ -3,10 +3,25 @@ const jwt = require("jsonwebtoken");
 const { httpRequest } = require('../utils/httpRequest.js');
 const http = require('http');
 
-
 module.exports = {
- //후기 추가 DB 반영
- creatingReview: (req, res) => {
+
+  createReview: async (req, res) => {
+    const getOptions = {
+      host: 'stop_bang_review_DB',
+      port: process.env.PORT,
+      path: `/db/review/findAllByRegnoAndUserId/${req.params.sys_regno}/${req.headers.id}`,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    };
+    const result = await httpRequest(getOptions);
+
+    return res.json(result.body);
+  },
+
+  //후기 추가 DB 반영
+  creatingReview: (req, res) => {
   /* msa */
   const postOptionsResident = {
     host: 'stop_bang_auth_DB',

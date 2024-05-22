@@ -10,6 +10,10 @@ router.use((req, res, next) => {
 });
 
 router.post(
+  '/create/:sys_regno',
+  reviewController.createReview);
+
+router.post(
   '/create_process/:sys_ra_regno',
   reviewController.creatingReview);
 
