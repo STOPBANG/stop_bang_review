@@ -40,7 +40,7 @@ module.exports = {
     const getOptionsReview = {
     host: 'stop_bang_review_DB',
     port: process.env.PORT,
-    path: `/db/review/findAllByRegno/${req.params.sys_ra_regno}`,
+    path: `/db/review/findAllByRegno/${req.params.sys_regno}`,
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ module.exports = {
         ...
         req.body,
         r_id: req.body.id,
-        ra_regno: req.params.sys_ra_regno,
+        ra_regno: req.params.sys_regno,
       };
 
       return httpRequest(postOptionsReview, requestBody);
@@ -167,12 +167,12 @@ reportCheck: async (req, res) => {
 
   getAvgRate: async (req, res) =>{
     let result={};
-    result.ra_regno = req.params.ra_regno;
+    result.ra_regno = req.params.sys_regno;
 
     const getOptions = {
       host: "stop_bang_review_DB",
       port: process.env.PORT,
-      path: `/db/review/findAllByRegno/${req.params.ra_regno}`,
+      path: `/db/review/findAllByRegno/${req.params.sys_regno}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",

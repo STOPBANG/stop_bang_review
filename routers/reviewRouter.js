@@ -14,7 +14,7 @@ router.post(
   reviewController.createReview);
 
 router.post(
-  '/create_process/:sys_ra_regno',
+  '/create_process/:sys_regno',
   reviewController.creatingReview);
 
 router.get(
@@ -31,7 +31,7 @@ router.get(
 )
 
 router.get(
-  "/avgRate/:ra_regno",
+  "/avgRate/:sys_regno",
   reviewController.getAvgRate
 )
 
