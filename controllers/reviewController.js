@@ -2,6 +2,8 @@ const tags = require("../public/assets/tag.js");
 const jwt = require("jsonwebtoken");
 const { httpRequest } = require('../utils/httpRequest.js');
 const http = require('http');
+const amqp = require('amqplib');
+
 
 module.exports = {
 
@@ -199,6 +201,30 @@ reportCheck: async (req, res) => {
 
     });
 
-  }
+  },
+
+  // 후기 열람하기 기능
+  postOpenedReview: async (req, res) =>{
+    let r_id = req.body.r_id;
+    let rv_id = req.body.rv_id;
+
+    amqp.connect(process.env.RABBIT).then(connection => {
+      connection.createChannel().then(messageChannel => {
+        const queue = 'opened_review';
+      
+        const msg = {
+          resident_r_id: r_id,
+          rv_id: rv_id,
+        };
+
+        const jsonMsg = JSON.stringify(msg);
+  
+        messageChannel.publish("", queue, Buffer.from(jsonMsg));
+      })
+    });
+
+  return res.json({});
+ },
+
 }
 

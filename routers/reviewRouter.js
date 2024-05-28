@@ -35,4 +35,9 @@ router.get(
   reviewController.getAvgRate
 )
 
+router.post(
+  "/postOpenedReview/:rv_id",
+  reviewController.postOpenedReview
+)
+
 module.exports = router;
