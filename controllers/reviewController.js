@@ -191,7 +191,8 @@ reportCheck: async (req, res) => {
           ratingSum += review.rating
         }
 
-        result.avg = (ratingSum/reviewCount);
+        result.avg = (ratingSum/reviewCount).toFixed(1);
+;
     
         return res.json(result);
       }else{ 
@@ -212,7 +213,7 @@ reportCheck: async (req, res) => {
       resident_r_id: r_id,
       rv_id: rv_id,
     };
-
+    console.log("reviewController - postOpenedReview");
     amqp.connect(process.env.RABBIT).then(connection => {
       connection.createChannel().then(messageChannel => {
         const queue = 'opened_review';
