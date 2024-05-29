@@ -7,7 +7,7 @@ module.exports = {
 
   createReview: async (req, res) => {
     const getOptions = {
-      host: 'stop_bang_review_DB',
+      host: 'review-api',
       port: process.env.PORT,
       path: `/db/review/findAllByRegnoAndUserId/${req.params.sys_regno}/${req.headers.id}`,
       method: 'GET',
@@ -24,7 +24,7 @@ module.exports = {
   creatingReview: (req, res) => {
   /* msa */
   const postOptionsResident = {
-    host: 'stop_bang_auth_DB',
+    host: 'auth-api',
     port: process.env.PORT,
     path: `/db/resident/findById`,
     method: 'POST',
@@ -38,7 +38,7 @@ module.exports = {
     /* 포인트 지급 */
     // 작성된 후기가 첫 후기인지 체크
     const getOptionsReview = {
-    host: 'stop_bang_review_DB',
+    host: 'review-api',
     port: process.env.PORT,
     path: `/db/review/findAllByRegno/${req.params.sys_regno}`,
     method: 'GET',
@@ -48,7 +48,7 @@ module.exports = {
     };
     httpRequest(getOptionsReview).then((response) => {
       const postOptionsPoint = {
-        host: 'stop_bang_auth_DB',
+        host: 'auth-api',
         port: process.env.PORT,
         path: `/db/resident/updatePoint`,
         method: 'POST',
@@ -72,7 +72,7 @@ module.exports = {
   }).then(()=> {
       /* 후기 db에 반영 */
       const postOptionsReview = {
-        host: 'stop_bang_review_DB',
+        host: 'review-api',
         port: process.env.PORT,
         path: `/db/review/create`,
         method: 'POST',
@@ -96,7 +96,7 @@ module.exports = {
 updateReview: (req, res) => {
   /* msa */
   const getOptions = {
-    host: 'stop_bang_review_DB',
+    host: 'review-api',
     port: process.env.PORT,
     path: `/db/review/findAllByReviewId/${req.params.rv_id}`,
     method: 'GET',
@@ -115,7 +115,7 @@ updateReview: (req, res) => {
 updatingReview: async (req, res) => {
   /* msa */
   const postOptions = {
-    host: 'stop_bang_review_DB',
+    host: 'review-api',
     port: process.env.PORT,
     path: `/db/review/update`,
     method: 'POST',
@@ -140,7 +140,7 @@ reportCheck: async (req, res) => {
     reportResult.result = 0;
     
     const getOptions = {
-      host: 'stop_bang_sub_DB',
+      host: 'sub-api',
       port: process.env.PORT,
       path: `/db/report/findAllByID/${rv_id}`,
       method: 'GET',
@@ -170,7 +170,7 @@ reportCheck: async (req, res) => {
     result.ra_regno = req.params.sys_regno;
 
     const getOptions = {
-      host: "stop_bang_review_DB",
+      host: "review-api",
       port: process.env.PORT,
       path: `/db/review/findAllByRegno/${req.params.sys_regno}`,
       method: "GET",
