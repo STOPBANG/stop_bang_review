@@ -208,22 +208,22 @@ reportCheck: async (req, res) => {
     let r_id = req.body.r_id;
     let rv_id = req.body.rv_id;
 
+    const msg = {
+      resident_r_id: r_id,
+      rv_id: rv_id,
+    };
+
     amqp.connect(process.env.RABBIT).then(connection => {
       connection.createChannel().then(messageChannel => {
         const queue = 'opened_review';
-      
-        const msg = {
-          resident_r_id: r_id,
-          rv_id: rv_id,
-        };
-
+        
         const jsonMsg = JSON.stringify(msg);
   
         messageChannel.publish("", queue, Buffer.from(jsonMsg));
       })
     });
 
-  return res.json({});
+  return res.json(msg);
  },
 
 }
