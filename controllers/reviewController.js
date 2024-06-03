@@ -2,7 +2,7 @@ const tags = require("../public/assets/tag.js");
 const jwt = require("jsonwebtoken");
 const { httpRequest } = require('../utils/httpRequest.js');
 const http = require('http');
-
+const amqp = require('amqplib');
 
 module.exports = {
 
@@ -72,23 +72,42 @@ module.exports = {
     return httpRequest(postOptionsPoint, requestBodyPoint);
   }).then(()=> {
       /* 후기 db에 반영 */
-      const postOptionsReview = {
-        host: 'review-api',
-        port: process.env.PORT,
-        path: `/db/review/create`,
-        method: 'POST',
-        headers: {
-         'Content-Type': 'application/json',
-        }
-      };
-      const requestBody = {
-        ...
-        req.body,
-        r_id: req.body.id,
-        ra_regno: req.params.sys_regno,
-      };
 
-      return httpRequest(postOptionsReview, requestBody);
+      amqp.connect(process.env.RABBIT).then(connection => {
+        connection.createChannel().then(async messageChannel => {
+          const queue = 'reviewQueue';
+        
+          const review = {
+            ...
+            req.body,
+            r_id: req.body.id,
+            sys_regno: req.params.sys_regno
+          };
+
+          const jsonReview = JSON.stringify(review);
+
+          messageChannel.publish("", queue, Buffer.from(jsonReview));
+        })
+      });
+
+      // 리뷰 생성 - 직접메시징
+      // const postOptionsReview = {
+      //   host: 'review-api',
+      //   port: process.env.PORT,
+      //   path: `/db/review/create`,
+      //   method: 'POST',
+      //   headers: {
+      //    'Content-Type': 'application/json',
+      //   }
+      // };
+      // const requestBody = {
+      //   ...
+      //   req.body,
+      //   r_id: req.body.id,
+      //   ra_regno: req.params.sys_regno,
+      // };
+
+      // return httpRequest(postOptionsReview, requestBody);
     });
   return res.json({});
   })
