@@ -88,7 +88,9 @@ module.exports = {
 
           messageChannel.publish("", queue, Buffer.from(jsonReview));
         })
-      });
+      }).then(()=> {
+        return {success: 'success'};
+      })
 
       // 리뷰 생성 - 직접메시징
       // const postOptionsReview = {
