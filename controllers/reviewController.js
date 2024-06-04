@@ -73,7 +73,13 @@ module.exports = {
   }).then(()=> {
       /* 후기 db에 반영 */
 
-      amqp.connect(process.env.RABBIT).then(connection => {
+      amqp.connect({
+        protocol: 'amqp',
+        hostname: process.env.RABBITMQ_HOST,
+        username: process.env.RABBITMQ_ID,
+        password: process.env.RABBITMQ_PASSWORD,
+        port: process.env.RABBITMQ_PORT,
+      }).then(connection => {
         connection.createChannel().then(async messageChannel => {
           const queue = 'reviewQueue';
         
@@ -234,7 +240,13 @@ reportCheck: async (req, res) => {
       rv_id: rv_id,
     };
     console.log("reviewController - postOpenedReview");
-    amqp.connect(process.env.RABBIT).then(connection => {
+    amqp.connect({
+      protocol: 'amqp',
+      hostname: process.env.RABBITMQ_HOST,
+      username: process.env.RABBITMQ_ID,
+      password: process.env.RABBITMQ_PASSWORD,
+      port: process.env.RABBITMQ_PORT,
+    }).then(connection => {
       connection.createChannel().then(messageChannel => {
         const queue = 'opened_review';
         
