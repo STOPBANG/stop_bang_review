@@ -70,33 +70,30 @@ module.exports = {
       requestBodyPoint.r_point=5
 
     return httpRequest(postOptionsPoint, requestBodyPoint);
-  }).then(()=> {
+  }).then(async ()=> {
       /* 후기 db에 반영 */
 
-      amqp.connect({
+      const connection = await amqp.connect({
         protocol: 'amqp',
         hostname: process.env.RABBITMQ_HOST,
         username: process.env.RABBITMQ_ID,
         password: process.env.RABBITMQ_PASSWORD,
         port: process.env.RABBITMQ_PORT,
-      }).then(connection => {
-        connection.createChannel().then(async messageChannel => {
-          const queue = 'reviewQueue';
-        
-          const review = {
-            ...
-            req.body,
-            r_id: req.body.id,
-            sys_regno: req.params.sys_regno
-          };
+      });
+      const messageChannel = await connection.createChannel();
+      const queue = 'reviewQueue';
+    
+      const review = {
+        ...
+        req.body,
+        r_id: req.body.id,
+        sys_regno: req.params.sys_regno
+      };
 
-          const jsonReview = JSON.stringify(review);
+      const jsonReview = JSON.stringify(review);
 
-          messageChannel.publish("", queue, Buffer.from(jsonReview));
-        })
-      }).then(()=> {
-        return {success: 'success'};
-      })
+      messageChannel.publish("", queue, Buffer.from(jsonReview));
+      return {success: 'success'};
 
       // 리뷰 생성 - 직접메시징
       // const postOptionsReview = {
